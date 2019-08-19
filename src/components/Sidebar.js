@@ -16,6 +16,7 @@ class Sidebar extends React.Component {
 
 	viewUsers = (list)=>{
 		var {UsersList} = this.state;
+		console.log("list",...list)
 		UsersList = [...list];
 		this.setState({UsersList})
 	}
@@ -29,7 +30,7 @@ class Sidebar extends React.Component {
 									UsersList.map((e,i)=>{
 										return(
 												<li key={i}>
-													{e}
+													{e ? e : null}
 												</li>
 											)
 									})

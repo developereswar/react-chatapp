@@ -1,20 +1,21 @@
 import React from 'react';
 import io from "socket.io-client";
-import ModalComponent from "./modal";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 class MessageList extends React.Component {
 	
 		state = {
 			Message:"",
 			users:[],
 			MessageList:[],
-			username:null
+			username:null,
+			toggle:false
 		}
 	
 	constructor(props){
 		super(props);
-	
 	}
 	componentDidMount(){
+		this.check();
 		let currentUser = localStorage.getItem("CurrentUser");
 		this.socket = io('http://localhost:8080')
 		this.setState({username:currentUser})
@@ -43,16 +44,43 @@ class MessageList extends React.Component {
 		Message =""
 		this.setState({ Message})
 	}
+
+	Toggle = ()=>{
+		 localStorage.setItem("CurrentUser", this.state.username);
+		 this.setState({toggle:false});
+	}
+
+	Handler=(e)=>{
+		this.setState({username:e.target.value})
+		}
+
+		check = ()=>{
+		let user = localStorage.getItem("CurrentUser");
+		console.log(user)
+		if(user && user !== "null"){
+			this.setState({toggle:false})
+		}else{
+			this.setState({toggle:true})
+		}
+	}
 	render() {
 		
-		const { MessageList, username } = this.state;
+		const { MessageList, username, toggle } = this.state;
 		return (
 				<div className="MessageList_wrapper">
-				<ModalComponent/>
+				<Modal isOpen={toggle} >
+			          <ModalBody>
+			          <h4>Enter Username</h4>
+			            	<input type="text" onChange={this.Handler}  name="username"/>
+			          </ModalBody>
+			          <ModalFooter>
+			            <Button color="primary" onClick={this.Toggle}>Submit</Button>
+			          </ModalFooter>
+	    	    </Modal>
 					<div className="MessageList_header">
 						<div className="user_header">
 							<h4> Group Chat</h4>
-							<span className="username">{(username)?username:"no User"}</span>
+							
 						</div>
 					</div>
 					<div className="MessageList">

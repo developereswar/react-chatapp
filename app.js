@@ -16,8 +16,10 @@ var Users = [];
 io.on("connect", (socket)=>{
 	socket.on('username', (nickname)=> {
 		    socket.nickname = nickname;
+		    console.log("Users:",socket.nickname)
 		    Users.push(socket.nickname);
 		    Users = [...new Set(Users)]
+		    console.log("Users:",Users)
 		});
 	  socket.on('GroupMessage', (msg, name)=>{
 	    io.emit('GroupMessage', msg, name, Users)
